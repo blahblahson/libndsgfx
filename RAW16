@@ -1,0 +1,31 @@
+
+RAW16 IMAGE FORMAT
+__________________
+
+RAW16 is the format used. It is a 16bit representation with straightforward
+parameters for fast loading and blitting.
+
+
+STRUCTURE
+
+The dimensions of the image are simply two width and height variables. The two
+are stored as unsigned 32bit integers at the beginning of the file, width then
+height. 32bit allows for a theoretical limit of 0xffffffff by 0xffffffff
+dimensions (4294967295x4294967295), or 18446744065119617025 pixels. That is
+quite enough pixels.
+
+Directly following the dimensions is the image data. It begins at the top left
+of the image and continues in a left-to-right, up-to-down manner as English
+does. The y dimension is implicit, so no delimiter is needed. Each pixel is
+represented by a 16 bit value in the form ABBBBBGGGGGRRRRR. The alpha bit
+toggles transparency or not in the layer. This is the format of DS screen
+buffers, so it's easy to blit with minimum processing when loading into memory.
+
+So the structure then looks something like (per byte):
+    WWWWHHHHAABBCC...
+W = width, H = height, A,B,C = pixels (0,0), (1,0) and (2,0) respectively
+
+There is no item signifying the end of the file because it could just mean
+another pixel (all values are allowed). The image should be read up to 2*w*h+8
+(the +8 for w/h) bytes, no more no less. If the file ends before that then some
+of the image will not be there.

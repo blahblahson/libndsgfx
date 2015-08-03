@@ -1,0 +1,4 @@
+* better Text::PrintStringWrap()
+* ImageMonolith class
+* some kind of scripting interface to create a GUI based on aliases
+* possibly some graphics primitives
